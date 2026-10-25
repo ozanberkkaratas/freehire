@@ -281,6 +281,11 @@ func (s onlyfy) templateDetail(ctx context.Context, e CompanyEntry, site string,
 	if ad == nil || r.title == "" {
 		return unreadableDetail(r.id, url, e.Company), true
 	}
+	// The view carries a hidden second copy of the ad (div.stepstone-content, display:none) for
+	// a job board's import; kept, every section would appear twice.
+	for hidden := firstByClass(ad, "stepstone-content"); hidden != nil && hidden != ad; hidden = firstByClass(ad, "stepstone-content") {
+		hidden.Parent.RemoveChild(hidden)
+	}
 	return Job{
 		ExternalID:  r.id,
 		URL:         url,

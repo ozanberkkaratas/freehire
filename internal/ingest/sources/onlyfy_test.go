@@ -158,6 +158,10 @@ func TestOnlyfyTemplateSiteFallsBackToJobAdView(t *testing.T) {
 	if j.Location != "São Paulo" || j.PostedAt == nil || j.PostedAt.Format("2006-01-02") != "2026-10-15" {
 		t.Errorf("Location/PostedAt = %q/%v", j.Location, j.PostedAt)
 	}
+	// The view's hidden duplicate of the ad (stepstone-content) is not part of the body.
+	if n := strings.Count(j.Description, "Internet, AI and Cloud Exchanges"); n != 1 {
+		t.Errorf("the ad's opening appears %d times, want once", n)
+	}
 	if !strings.Contains(j.Description, "Internet, AI and Cloud Exchanges") {
 		t.Errorf("Description lacks the job ad: %.200q", j.Description)
 	}
